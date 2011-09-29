@@ -11,6 +11,7 @@ or install through Makefile
 
     $ make install
 
+
 USAGE
 ------
 
@@ -36,4 +37,13 @@ eg.
 [file] dir/file.php => [test] <g:phpunit_testroot>/dir/fileTest
 [file] <g:phpunit_testroot>/dir/fileTest => [test] <g:phpunit_testroot>/dir/fileTest
 
+
+CONFIGURATION
+-------------
+configure your phpunit plugin in your .vimrc file:
+
+  let g:phpunit_testroot = 'tests'
+  let g:phpunit_tests = g:phpunit_testroot
+  let g:phpunit_params = '--stop-on-failure'
+  let g:phpunit_highlights = 1
 
