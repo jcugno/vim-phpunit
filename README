@@ -5,8 +5,11 @@ this plugin allows you run tests directly from vim
 INSTALL
 -------
 
-just copy 'phpunit.vim' to your '$HOME/.vim/plugins' directry
+just copy 'phpunit.vim' to your '$HOME/.vim/ftplugin/php/' directry
 
+or install through Makefile
+
+    $ make install
 
 USAGE
 ------
