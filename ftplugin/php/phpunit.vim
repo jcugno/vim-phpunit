@@ -19,9 +19,12 @@
 " IDEA: (maybe in deep future)
 " * support call throught :make 
 " * send bugs to <quickfix> buffer
-"
+if !exists('g:phpunit_loaded')
+  let g:phpunit_loaded = 1
+  finish
+endif
 
-" 
+
 " binary file to run default
 "
 if !exists('g:phpunit_bin')
@@ -41,6 +44,10 @@ endif
 "
 if !exists('g:phpunit_tests')
   let g:phpunit_tests = g:phpunit_testroot
+endif
+
+if !exists('g:phpunit_libroot')
+  let g:phpunit_libroot = 'lib'
 endif
 
 
@@ -115,16 +122,22 @@ function! PhpUnitSwitchFile()
   let f = expand('%')
   let cmd = ''
   let is_test = expand('%:t') =~ "Test\."
+
   if is_test
-    " remove phpunit_testroot
-    let f = substitute(f,'^'.g:phpunit_testroot.'/','','')
+    " replace phpunit_testroot with libroot
+    let f = substitute(f,'^'.g:phpunit_testroot.'/',g:phpunit_libroot,'')
+
     " remove 'Test.' from filename
     let f = substitute(f,'Test\.','.','')
     let cmd = 'to '
   else
-    let f = g:phpunit_testroot . "/" . expand('%:r') . "Test.php"
+    let f = expand('%:r')
+    let f = substitute(f,'^'.g:phpunit_libroot, g:phpunit_testroot, '')
+    let f = f . 'Test.php'
     let cmd = 'bo '
   endif
+  " exec 'tabe ' . f 
+
   " is there window with complent file open?
   let win = bufwinnr(f)
   if win > 0
@@ -132,7 +145,8 @@ function! PhpUnitSwitchFile()
   else
     execute cmd . "vsplit " . f
   endif
-endfunction
+
+endf
 
 "
 "render output to scratch buffer
@@ -168,12 +182,13 @@ function! s:PhpUnitOpenBuffer(content)
   setlocal nomodifiable
 endfunction
 
-command! -nargs=? -complete=file PhpUnit call PhpUnitRun(<q-args>)
-command! PhpUnitFile call PhpUnitRunEditedFile()
-command! PhpUnitSwitchFile call PhpUnitSwitchFile()
+com! -nargs=? -complete=file PhpUnit call PhpUnitRun(<q-args>)
+com! PhpUnitFile       :cal PhpUnitRunEditedFile()
+com! PhpUnitSwitchFile :cal PhpUnitSwitchFile()
 
 if !exists('g:phpunit_key_map') || !g:phpunit_key_map
-    nnoremap <Leader>tt :PhpUnit<Enter>
-    nnoremap <Leader>tf :PhpUnitFile<Enter>
-    nnoremap <Leader>ts :PhpUnitSwitchFile<Enter>
+    nnoremap <Leader>tt :PhpUnit<CR>
+    nnoremap <Leader>tf :cal PhpUnitFile()<CR>
+    nnoremap <Leader>ts :cal PhpUnitSwitchFile()<CR>
 endif
+
