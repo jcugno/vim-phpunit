@@ -19,10 +19,11 @@
 " IDEA: (maybe in deep future)
 " * support call throught :make 
 " * send bugs to <quickfix> buffer
-if !exists('g:phpunit_loaded')
-  let g:phpunit_loaded = 1
+if exists('g:phpunit_loaded')
   finish
 endif
+
+let g:phpunit_loaded = 1
 
 
 " binary file to run default
