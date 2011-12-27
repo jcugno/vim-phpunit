@@ -47,8 +47,8 @@ if !exists('g:phpunit_tests')
   let g:phpunit_tests = g:phpunit_testroot
 endif
 
-if !exists('g:phpunit_libroot')
-  let g:phpunit_libroot = 'lib'
+if !exists('g:phpunit_srcroot')
+  let g:phpunit_srcroot = 'src'
 endif
 
 
@@ -126,14 +126,14 @@ function! PhpUnitSwitchFile()
 
   if is_test
     " replace phpunit_testroot with libroot
-    let f = substitute(f,'^'.g:phpunit_testroot.'/',g:phpunit_libroot,'')
+    let f = substitute(f,'^'.g:phpunit_testroot.'/',g:phpunit_srcroot,'')
 
     " remove 'Test.' from filename
     let f = substitute(f,'Test\.','.','')
     let cmd = 'to '
   else
     let f = expand('%:r')
-    let f = substitute(f,'^'.g:phpunit_libroot, g:phpunit_testroot, '')
+    let f = substitute(f,'^'.g:phpunit_srcroot, g:phpunit_testroot, '')
     let f = f . 'Test.php'
     let cmd = 'bo '
   endif
