@@ -145,8 +145,11 @@ function! PhpUnitSwitchFile()
     execute win . "wincmd w"
   else
     execute cmd . "vsplit " . f
+    let dir = expand('%:h')
+    if ! isdirectory(dir) 
+      cal mkdir(dir,'p')
+    endif
   endif
-
 endf
 
 "
