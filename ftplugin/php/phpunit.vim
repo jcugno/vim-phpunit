@@ -126,15 +126,16 @@ function! PhpUnitSwitchFile()
 
   if is_test
     " replace phpunit_testroot with libroot
-    let f = substitute(f,'^'.g:phpunit_testroot.'/',g:phpunit_srcroot,'')
-
+    " let f = substitute(f,'^'.g:phpunit_testroot.'/',g:phpunit_srcroot,'')
+		let f = substitute(f,'^'.g:phpunit_testroot.'/','','')
     " remove 'Test.' from filename
     let f = substitute(f,'Test\.','.','')
     let cmd = 'to '
   else
-    let f = expand('%:r')
-    let f = substitute(f,'^'.g:phpunit_srcroot, g:phpunit_testroot, '')
-    let f = f . 'Test.php'
+		let f = g:phpunit_testroot . "/" . expand('%:r') . "Test.php"
+"    let f = expand('%:r')
+"    let f = substitute(f,'^'.g:phpunit_srcroot, g:phpunit_testroot, '')
+"    let f = f . 'Test.php'
     let cmd = 'bo '
   endif
   " exec 'tabe ' . f 
@@ -192,7 +193,7 @@ com! PhpUnitSwitchFile :cal PhpUnitSwitchFile()
 
 if !exists('g:phpunit_key_map') || !g:phpunit_key_map
     nnoremap <Leader>tt :PhpUnit<CR>
-    nnoremap <Leader>tf :cal PhpUnitFile()<CR>
+    nnoremap <Leader>tf :PhpUnitFile<CR>
     nnoremap <Leader>ts :cal PhpUnitSwitchFile()<CR>
 endif
 
